@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <title>WebGL - Hello, world!</title>
+    <meta name="description" content="WebGL - Hello, world!">
+    <meta name="author" content="Aassif Benassarou">
+    <link rel="stylesheet" href="https://webgl.benassarou.fr/tp/style.css">
+
+    <script>
+      class HelloWorld
+      {
+        constructor(canvas) {
+        this.canvas = document.getElementById(canvas);
+        this.gl = this.canvas.getContext('webgl2');
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+        console.log('HelloWorld: ' + w + 'x' + h);
+
+        const gl = this.gl;
+        gl.viewport(0, 0, w, h);
+        gl.clearColor(0, 1, 0, 1);
+
+        this.vbo = gl.createBuffer();
+        this.program = HelloWorld.PROGRAM(gl, 'vertex-shader', 'fragment-shader');
+
+        this.animate();
+      }
+
+      animate() {
+
+        // Point de coordonnées (x, y).
+        const P = (x, y) => ({x, y});
+
+        // Translation de vecteur "t".
+        const T = (p, t) => P (p.x + t.x, p.y + t.y);
+
+        // Rotation d'angle "a".
+        // http://fr.wikipedia.org/wiki/Rotation_vectorielle
+        const R = (p, a) => {
+        const s = Math.sin (a), c = Math.cos (a);
+        return P (p.x * c - p.y * s, p.x * s + p.y * c);
+        };
+
+
+        const VERTICES = [-0.75, 0.25, -0.25, 0.25, -0.75, 0.75, -0.25, 0.75];
+        var taille = 0.25;
+          var a = R(P(0.25, -0.75),30);
+          //console.log(a.x,a.y);
+          var b = R(P(0.75, -0.75),30);
+          //console.log(b.x,b.y);
+          var c = R(P(0.25, -0.25),30);
+          //console.log(c.x,c.y);
+          var d = R(P(0.75, -0.25),30);
+          //console.log(d.x,d.y);
+
+          const VERTICES2 = [a.x, a.y,  b.x, b.y,  c.x, c.y,  d.x, d.y];        const gl = this.gl;
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.useProgram(this.program);
+
+        gl.uniform4f(gl.getUniformLocation(this.program, 'color'), 1, 1, 1, 1);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.vbo);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(VERTICES), gl.STATIC_DRAW);
+        gl.enableVertexAttribArray(0);
+        gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        
+        gl.uniform4f(gl.getUniformLocation(this.program, 'color'), 1, 0, 0, 1);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(VERTICES2), gl.STATIC_DRAW);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        gl.disableVertexAttribArray(0);
+        gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+        gl.useProgram(null);
+
+        requestAnimationFrame(() => this.animate());
+      }
+      };
+
+      HelloWorld.SHADER = function (gl, type, id)
+      {
+        const shader = gl.createShader (type);
+        const script = document.getElementById (id);
+        gl.shaderSource (shader, script.textContent);
+        gl.compileShader (shader);
+        if (! gl.getShaderParameter (shader, gl.COMPILE_STATUS))
+          throw gl.getShaderInfoLog (shader);
+
+        return shader;
+      }
+
+      HelloWorld.PROGRAM = function (gl, vertex, fragment)
+      {
+        const program = gl.createProgram ();
+        gl.attachShader (program, HelloWorld.SHADER (gl, gl.VERTEX_SHADER,   vertex));
+        gl.attachShader (program, HelloWorld.SHADER (gl, gl.FRAGMENT_SHADER, fragment));
+        gl.linkProgram (program);
+        if (! gl.getProgramParameter (program, gl.LINK_STATUS))
+          throw gl.getProgramInfoLog (program);
+
+        return program;
+      }
+    </script>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+      precision mediump float;
+      attribute vec2 position;
+      void main ()
+      {
+        gl_Position = vec4 (position, 0.0, 1.0);
+      }
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+      precision mediump float;
+      uniform vec4 color;
+      void main ()
+      {
+        gl_FragColor = color;
+      }
+    </script>
+
+    <style>
+      body {text-align: center;}
+    </style>
+  </head>
+
+  <body>
+    <h1><i>Hello, world!</i></h1>
+    <canvas id="canvas:hello-world" width="600" height="600"></canvas>
+    <script>new HelloWorld ('canvas:hello-world');</script>
+  </body>
+</html>

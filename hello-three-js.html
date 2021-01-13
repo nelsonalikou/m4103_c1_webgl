@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <title>WebGL - Hello, three.js!</title>
+    <meta name="description" content="WebGL - Hello, three.js!">
+    <meta name="author" content="Aassif Benassarou">
+    <link rel="stylesheet" href="https://webgl.benassarou.fr/tp/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/96/three.min.js"></script>
+
+    <script>
+      class HelloThreeJS
+      {
+        constructor (canvas)
+        {
+          this.canvas = document.getElementById (canvas);
+
+          this.scene = new THREE.Scene ();
+
+          const geometry = new THREE.PlaneGeometry (1, 1);
+          const material = new THREE.MeshBasicMaterial ({color: '#fff'});
+          this.scene.add (new THREE.Mesh (geometry, material));
+
+          this.camera = new THREE.OrthographicCamera (-1, +1, +1, -1, +1, -1);
+
+          const settings = {canvas: this.canvas, antialias: true, alpha: true};
+          this.renderer = new THREE.WebGLRenderer (settings);
+          this.renderer.setClearColor (0x00ff00, 1);
+
+          this.animate ();
+        }
+
+        animate ()
+        {
+          this.renderer.render (this.scene, this.camera);
+          requestAnimationFrame (() => this.animate ());
+        }
+      }
+    </script>
+
+    <style>
+      body {text-align: center;}
+    </style>
+  </head>
+
+  <body>
+    <h1><em>Hello, three.js!</em></h1>
+    <canvas id="canvas:hello-three-js" width="600" height="600"></canvas>
+    <script>new HelloThreeJS ('canvas:hello-three-js');</script>
+  </body>
+</html>
