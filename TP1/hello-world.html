@@ -44,29 +44,28 @@
         };
 
 
-        const VERTICES = [-0.75, 0.25, -0.25, 0.25, -0.75, 0.75, -0.25, 0.75];
-        var taille = 0.25;
-        //Vecteur de Translation de coordonnées {450,0}
-        var t = P(+450/600,0/600);
+        const VERTICES = [-0.75, -0.25, -0.25, -0.25, -0.75, -0.75, -0.25, -0.75];
+        //Vecteur de Translation de coordonnées {0,450+150} 
+        var t = P(300/600,+300/600);
 
         //Sommet inférieur droit, obtenu par Rotation d'angle 30° du point {0.25,0.75} puis par Translation par rapport au vecteur t.
-          var a = T(R(P(0.25, -0.75),30),t);
+          var a = T(R(P(-0.25, -0.25),Math.PI/6),t);
           //console.log(a.x,a.y);
 
         //Sommet inférieur gauche,
-          var b = T(R(P(0.75, -0.75),30),t);
+          var b = T(R(P(0.25, -0.25),Math.PI/6),t);
           //console.log(b.x,b.y);
 
         //Sommet supérieur droit,
-          var c = T(R(P(0.25, -0.25),30),t);
+          var c = T(R(P(-0.25, 0.25),Math.PI/6),t);
           //console.log(c.x,c.y);
 
         //Sommet supérieur gauche,
-          var d = T(R(P(0.75, -0.25),30),t);
+          var d = T(R(P(0.25, 0.25),Math.PI/6),t);
           //console.log(d.x,d.y);
 
           const VERTICES2 = [a.x, a.y,  b.x, b.y,  c.x, c.y,  d.x, d.y];
-          //const VERTICES2 = [0.25, -0.75, 0.75, -0.75, 0.25, -0.25, 0.75, -0.25];        
+          //const VERTICES2 = [-0.25, -0.25, 0.25, -0.25, -0.25, 0.25, 0.25, 0.25];       
           const gl = this.gl;
         gl.clear(gl.COLOR_BUFFER_BIT);
         gl.useProgram(this.program);

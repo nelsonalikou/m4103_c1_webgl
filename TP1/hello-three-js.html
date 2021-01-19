@@ -17,9 +17,34 @@
 
           this.scene = new THREE.Scene ();
 
-          const geometry = new THREE.PlaneGeometry (1, 1);
-          const material = new THREE.MeshBasicMaterial ({color: '#fff'});
-          this.scene.add (new THREE.Mesh (geometry, material));
+          //Création du carré 
+          //const geometry = new THREE.PlaneGeometry (0.5, 0.5);
+
+          const geometry1 = new THREE.BoxBufferGeometry (0.5, 0.5, 0);
+          const material1 = new THREE.MeshBasicMaterial ({color: '#fff'});
+          const SQUARE1 = new THREE.Mesh (geometry1, material1);
+
+          SQUARE1.translateX(-0.50);
+          SQUARE1.translateY(-0.50);
+          console.log(SQUARE1.position);
+          
+          this.scene.add (SQUARE1);
+
+          const geometry2 = new THREE.BoxBufferGeometry (0.5, 0.5, 0);
+          const material2 = new THREE.MeshBasicMaterial ({color: '#f00'});
+          const SQUARE2 = new THREE.Mesh (geometry2, material2);
+
+          SQUARE2.translateX(+0.50);
+          SQUARE2.translateY(+0.50);
+          /*SQUARE2.rotateX(Math.PI/6);
+          SQUARE2.rotateY(Math.PI/6);
+          SQUARE2.rotateZ(Math.PI/6);*/
+
+          SQUARE2.setRotationFromAxisAngle(new THREE.Vector3(0,0,0.5),Math.PI/6);
+          console.log(SQUARE2.position);
+          console.log(SQUARE2.rotation);
+
+          this.scene.add (SQUARE2);
 
           this.camera = new THREE.OrthographicCamera (-1, +1, +1, -1, +1, -1);
 
