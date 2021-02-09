@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <title>WebGL - Hello, JS Polygone!</title>
+    <meta name="description" content="WebGL - Hello, JS!">
+    <meta name="author" content="Aassif Benassarou">
+    <link rel="stylesheet" href="https://bns.sr/webgl/tp/style.css">
+    <style>
+      body {text-align: center;}
+    </style>
+  </head>
+
+  <body>
+    <h1><i>Hello, Polygone!</i></h1>
+    <canvas id="canvas:hello-js" width="600" height="600"></canvas>
+    <script type="module">
+      import HelloJS from "./HelloJS.js";
+      new HelloJS ('canvas:hello-js');
+    </script>
+  </body>
+</html>
