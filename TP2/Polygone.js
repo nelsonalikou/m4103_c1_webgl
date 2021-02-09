@@ -5,6 +5,7 @@ class Polygone extends vao.DirectVAO
       {
         constructor (gl, n, r)
         {
+<<<<<<< HEAD
             
           //Tableau contenant les coordonnées des différents sommets
           const VERTICES = [
@@ -34,6 +35,11 @@ class Polygone extends vao.DirectVAO
 
             const a = {size: 2, type: gl.FLOAT};
             const cmd = {mode: gl.TRIANGLE_FAN, first: 0, count: n};
+=======
+            const v = data.FLOAT32 (Polygone.VERTICES);
+            const a = {size: 2, type: gl.FLOAT};
+            const cmd = {mode: gl.TRIANGLE_STRIP, first: 0, count: n};
+>>>>>>> d1f8e2be69af0cb8ba86eabb208aec4da00efe33
             super (gl, {data: v, attribs: [a]}, cmd);
         };
 
@@ -44,6 +50,17 @@ class Polygone extends vao.DirectVAO
         }
       };
 
+<<<<<<< HEAD
 
+=======
+Polygone.VERTICES = [
+    [-1, -1], 
+    [+1, -1], 
+    [-1, +1], 
+    [+1, +1]
+    /*[+1, +1],
+    [+1, +1]*/
+    ];
+>>>>>>> d1f8e2be69af0cb8ba86eabb208aec4da00efe33
 
 export default Polygone;

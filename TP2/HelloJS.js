@@ -12,7 +12,11 @@ class HelloJS
     gl.clearColor (0, 1, 0, 1);
 
     this.program = new ColoringBook (gl);
+<<<<<<< HEAD
     this.polygone = new Polygone (gl,6,50/150);
+=======
+    this.polygone = new Polygone (gl,4,6);
+>>>>>>> d1f8e2be69af0cb8ba86eabb208aec4da00efe33
     this.gl = gl;
 
     this.animate ();
