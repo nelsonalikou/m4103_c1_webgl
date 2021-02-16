@@ -1,55 +1,72 @@
 import * as matrix  from "https://bns.sr/webgl/js/matrix.js";
 import Etoile     from "./Etoile.js";
 import ColoringBook from "https://bns.sr/webgl/js/coloring-book.js";
+import {ORTHO} from "https://bns.sr/webgl/js/matrix";
 
 class TroisEtoiles
 {
-  constructor (id)
-  {
-    const canvas = document.getElementById (id);
-    const gl = canvas.getContext ('webgl2');
-    gl.viewport (0, 0, canvas.width, canvas.height);
-    gl.clearColor (0, 1, 0, 1);
 
-    this.program = new ColoringBook (gl);
-    // 1=> 600 et on veut un rayon de 200
-    let width = 300;
-      this.tailleEtoile1 = [75, 150];
-      this.etoile1 = new Etoile(gl, 5, this.tailleEtoile1[0]/width, this.tailleEtoile1[1]/width); //[150, 300]
+    constructor (id)
+    {
+        //Cela récupère le canvas
+        const canvas = document.getElementById (id);
 
+        // le contexte dans lequel on récupère  le canvas
+        const gl = canvas.getContext ('webgl2');
 
+        //affiche un carré avec des cordonnées en fonction du millieu
+        gl.viewport (0, 0, canvas.width, canvas.height);
 
-      /*this.tailleEtoile2 = [50, 100];
-      this.etoile2 = new Etoile(gl, 5, this.tailleEtoile2[0]/width, this.tailleEtoile2[1]/width, [450, 150]);
-      this.tailleEtoile3 = [25, 50];
-      this.etoile3 = new Etoile(gl, 5, this.tailleEtoile3[0]/width, this.tailleEtoile3[1]/width, [450, 450]);*/
+        //Choisie la couleur du canvas
+        gl.clearColor (0, 1, 0, 1);
 
-    this.gl = gl;
-
+        //création dun instance ColoringBook
+        this.program = new ColoringBook (gl, ORTHO(0, 600, 0, 600, -1, 1));
         
+        //Déclaration de l'étoile qui sera utlisée pour tous les dessins
+        this.etoile1 = new Etoile(gl, 5, 25, 50);
+        this.gl = gl;
 
-    this.animate ();
-  }
+        this.echelle = 1;
+        //Définition du zoom (grossissement - diminution)
+        document.addEventListener('keydown', (event) => {
+            if (event.key === '+')
+            {
+                this.echelle *= 2;
+            }else if(event.key === '-')
+            {
+                this.echelle /= 2;
+            }
+        });
 
-  animate ()
-  {
-    this.gl.clear (this.gl.COLOR_BUFFER_BIT);
+        this.animate ();
+    }
 
-    this.program.use (p => {
-      p.setModelView (matrix.SCALE (0.5, 0.5, 0));
-      //Dessin au centre en (300, 300)
-      p.setModelView(matrix.TRANSLATION(0.125, 0.25, 0));
-      p.setColor ([1, 1, 1, 1]);
-      //this.polygone.draw ();
+    /**
+     *
+     */
+    animate ()
+    {
+        this.gl.clear (this.gl.COLOR_BUFFER_BIT);
 
+        let e = this.echelle;
+        this.program.use (p => {
+            //Mise en place de la première étoile
+            p.setModelView (matrix.MUL4(matrix.TRANSLATION(150, 300, 1), matrix.SCALE(e*3, e*3, 1)));
+            p.setColor ([1, 1, 1, 1]);
+            this.etoile1.draw ();
+            //Mise en place de la seconde étoile
+            p.setModelView (matrix.MUL4(matrix.TRANSLATION(450, 150, 1), matrix.SCALE(e*2, e*2, 1)));
+            p.setColor ([1, 1, 1, 1]);
+            this.etoile1.draw ();
+            //Mise en place de la troisième étoile
+            p.setModelView (matrix.MUL4(matrix.TRANSLATION(450, 450, 1), matrix.SCALE(e, e, 1)));
+            p.setColor ([1, 1, 1, 1]);
+            this.etoile1.draw ();
+        });
 
-      this.etoile1.draw ();
-      /*this.etoile2.draw ();
-      this.etoile3.draw ();*/
-    });
-
-    requestAnimationFrame (() => this.animate ());
-  }
+        requestAnimationFrame (() => this.animate ());
+    }
 }
 
 export default TroisEtoiles;
