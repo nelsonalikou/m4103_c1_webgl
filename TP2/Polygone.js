@@ -15,8 +15,8 @@ class Polygone extends vao.DirectVAO
 
           let alpha = 0;
 
-          console.log(r/600);
-          console.log(angle);
+          //console.log(r/600);
+          //console.log(angle);
           let x = 1;
           let y = 1;
           for(let i=0; i < n; i++){
@@ -24,11 +24,11 @@ class Polygone extends vao.DirectVAO
                y = r * Math.sin(alpha);
 
             alpha = alpha + angle
-            console.log(x);
+            //console.log(x);
             VERTICES.push([x,y]);
           }
 
-          console.log(VERTICES);
+          //console.log(VERTICES);
 
           const v = data.FLOAT32(VERTICES);
 
