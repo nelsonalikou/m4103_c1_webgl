@@ -26,7 +26,7 @@ class RainbowQuad
     //Onjet observé
     this.quad       = new Quad (gl);
     this.program    = new Program (gl, RainbowQuad.PROGRAM);
-    this.blue       = RainbowQuad.RANGE (r);
+    this.rotation   = RainbowQuad.RANGE (r);
     //
     //this.polygone = new Polygone (gl,4,0.75));
     //this.gl = gl;
@@ -37,9 +37,9 @@ class RainbowQuad
   animate ()
   {
     this.gl.clear (this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-    const M = matrix.TRANSLATION(0,0,-5);
+    const M = matrix.MUL4(matrix.TRANSLATION(0,0,-5), this.rotation) ;
     const P = matrix.PERSPECTIVE(Math.PI/4,600/600,5-2,5+2);
-    this.program.use ({'b': this.blue, M, 'P' : P}, p => this.quad.draw ());
+    this.program.use ({ M, 'P' : P}, p => this.quad.draw ());
 
     requestAnimationFrame (() => this.animate ());
   }
@@ -52,18 +52,18 @@ RainbowQuad.PROGRAM =
   //M : matrice de projection
   //P : matrice de modélisation
   //
-  uniforms: {'b': 'float', 'M': 'mat4', 'P': 'mat4'},
+  uniforms: { 'M': 'mat4', 'P': 'mat4'},
 
   vertex:
   [
     'precision mediump float;',
     //
-    'uniform float b;', 'uniform mat4 M, P;',
+    'uniform mat4 M, P;',
     'attribute vec2 position;',
     'varying vec4 color;',
     'void main ()',
     '{',
-      'color = vec4 (0.5 * position + 0.5, b, 1);',
+      'color = vec4 (0.5 * position + 0.5, 0, 1);',
       // 
       'gl_Position = P * M * vec4 (position, 0, 1);',
     '}'
@@ -82,13 +82,13 @@ RainbowQuad.PROGRAM =
 
 RainbowQuad.RANGE = function (r)
 {
-  return r.value / 100;
+  return  matrix.ROTATION([0,1,0], r.value * 2 * Math.PI/100);
 }
 
 RainbowQuad.ONINPUT = function (quad)
 {
   return function (e) {
-    quad.blue = RainbowQuad.RANGE (e.target);
+    quad.rotation = RainbowQuad.RANGE (e.target);
   };
 }
 
